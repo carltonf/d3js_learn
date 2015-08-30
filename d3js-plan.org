@@ -1,0 +1,94 @@
+A Plan to *master* =D3.js=
+
+* Book to read
+
+=D3: Tips and Tricks= a free ebook.
+
+I have other PDF ebooks, but read this first.
+
+* Courses & Assignments
+** DONE [[https://www.dashingd3js.com/table-of-contents][D3 Tutorial Table of Contents | DashingD3js.com]]
+CLOSED: [2015-08-30 Sun 11:49]
+:LOGBOOK:  
+- State "DONE"       from "TODO"       [2015-08-30 Sun 11:49] \\
+  A very nicely crafted tutorial to cover the very basics.
+:END:      
+CLOCK: [2015-08-28 Fri 14:31]--[2015-08-28 Fri 17:23] =>  2:52
+
+
+A simple list of what to learn, mainly useful for the next task.
+** TODO Cover the suggested tutorials in =Coursera= Page. [2/3]
+The =dashingd3js= covers too little.
+*** DONE [[http://code.tutsplus.com/tutorials/building-a-multi-line-chart-using-d3js--cms-22935][Building a Multi-Line Chart Using D3.js - Tuts+ Code Tutorial]]
+CLOSED: [2015-08-30 Sun 16:13]
+:LOGBOOK:  
+- State "DONE"       from "TODO"       [2015-08-30 Sun 16:13]
+:END:      
+
+*LEARNED*: setup conventional X Y axis, how to style them accordingly and the
+use of artificial margins to style the SVG area.
+
+**** TODO The manual management of margins is tedious.
+- [ ] What about an embedded SVG container or to prevent SVG from clipping content.
+
+  [2015-08-30 Sun] The =transform= on the =g= can already be used for this
+  purpose.
+
+*** DONE [[http://bl.ocks.org/d3noob/b3ff6ae1c120eea654b5][Simple d3.js Graph]]
+CLOSED: [2015-08-30 Sun 20:28]
+:LOGBOOK:  
+- State "DONE"       from "TODO"       [2015-08-30 Sun 20:28]
+:END:      
+
+*LEARNED*:
+1. =d3.csv=
+2. Parsing date
+   #+BEGIN_SRC javascript
+     // Parse the date / time
+     var parseDate = d3.time.format("%d-%b-%y").parse;
+     // ........
+     parseDate(d.date);
+   #+END_SRC
+3. Canvas Group
+
+*** TODO Basic Dynamic Graph [0/2]
+
+**** TODO [[http://code.tutsplus.com/tutorials/building-a-multi-line-chart-using-d3js-part-2--cms-22973][Building a Multi-Line Chart Using D3.js: Part 2 - Tuts+ Code Tutorial]]
+
+**** TODO [[http://www.d3noob.org/2014/07/d3js-multi-line-graph-with-automatic.html][D3.js Tips and Tricks: d3.js multi-line graph with automatic (interactive) legend]]
+
+** TODO =Coursera=: visualization
+
+two programming assignments
+
+* Notes
+
+** Data Visualization Process
+
+- Acquire
+- Parse
+- Filter
+- Mine
+- Represent
+- Refine
+- Interact
+
+** Selections
+
+- Most operators/methods in =D3= returns a selection.
+
+** Joins
+
+** Binding Data to Dom Elements.
+
+=__data__= property in =DOM= object.
+
+** SVG Path DSL
+
+=D3.js= Path Data Generators! to ease the pain of writing Path DSL manually. We
+still need to figure out how to plot the data on the graph first.
+
+** TODO Bezier curve
+
+* Refs
+- [[http://www.visual-literacy.org/periodic_table/periodic_table.html][A Periodic Table of Visualization Methods]]
