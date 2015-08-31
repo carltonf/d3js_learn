@@ -57,9 +57,27 @@ CLOSED: [2015-08-30 Sun 20:28]
 
 **** TODO [[http://www.d3noob.org/2014/07/d3js-multi-line-graph-with-automatic.html][D3.js Tips and Tricks: d3.js multi-line graph with automatic (interactive) legend]]
 
-** TODO =Coursera=: visualization
+** TODO =Coursera=: visualization [0/1]
 
 two programming assignments
+
+*** TODO Visualize Data Using a Chart. [0/4]
+
+**** TODO Basic version
+
+Use the provided data set (JS&CSV) to draw a chart: time-temperature-deviation
+with 5 lines denoting 5 climate zones.
+
+**** TODO Add various information tags
+
+- [ ] legends
+- [ ] Axis info
+
+**** TODO Add interactivity
+
+**** TODO Parsing the original data on my own.
+
+- [ ] Investigating JS library for data parsing.
 
 * Notes
 
