@@ -7,20 +7,46 @@
 
 // TODO factor into a class for this SVG container/canvas parameters generation
 var svgParams = {
-    // raw SVG container
-    W: 900,
-    H: 600,
-    M: {
-        TOP: 20,
-        RIGHT: 20,
-        BOTTOM: 20,
-        LEFT: 50,
+    canvas: {
+        width: 600,
+        height: 400,
+        margins: {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 50,
+        },
     },
+
+    // on the left of "canvas"
+    legends: {
+        width: 250,
+        height: 400,
+        margins: {
+            top: 40,
+            right: 20,
+            bottom: 20,
+            left: 10,
+        }
+    },
+
+    // on the bottom of canvas&legend
+    caption: {
+        height: 100,
+        margins: {
+            top: 0,
+            right: 0,
+            bottom: 20,
+            left: 0,
+        },
+    }
 };
 
 (function(self){
-    self.width = self.W - self.M.LEFT - self.M.RIGHT;
-    self.height = self.H - self.M.TOP - self.M.BOTTOM;
+    self.W = self.canvas.width + self.canvas.margins.right + self.canvas.margins.left
+        + self.legends.width + self.legends.margins.right + self.legends.margins.left;
+    self.H = self.canvas.height + self.canvas.margins.top + self.canvas.margins.bottom
+        + self.caption.height + self.caption.margins.top + self.caption.margins.bottom;
 })(svgParams);
 
 // use bare DOM API to have an cross-browser implementation
@@ -47,25 +73,25 @@ svgDraw = d3.select('#svg-draw').append('svg')
 // TODO: include Global data for reference?
 
 var dataParams = [
-    { name: "South Frigid Zone",
+    { name: "S Frigid Zone",
       key: "90S-64S",
       color: 'MidnightBlue', },
-    { name: "South Temperate Zone",
+    { name: "S Temperate Zone",
       key: "64S-44S",
       color: 'SteelBlue', },
-    { name: "South sub-Tropical Zone",
+    { name: "S sub-Tropical Zone",
       key: "44S-24S",
       color: 'Teal', },
     { name: "Tropical Zone",
       key: "24S-24N",
       color: 'Crimson', },
-    { name: "North sub-Tropical Zone",
+    { name: "N sub-Tropical Zone",
       key: "24N-44N",
       color: 'ForestGreen', },
-    { name: "North Temperate Zone",
+    { name: "N Temperate Zone",
       key: "44N-64N",
       color: 'Blue', },
-    { name: "North Frigid Zone",
+    { name: "N Frigid Zone",
       key: "64N-90N",
       color: 'Indigo', },
 ];
@@ -112,38 +138,71 @@ tempMargin = Math.floor(0.05 * (scaleParams.maxTemp - scaleParams.minTemp));
 var xScale = d3.scale.linear()
     .domain([scaleParams.beginYear - scaleParams.beginYearMargin,
              scaleParams.endYear + scaleParams.endYearMargin])
-    .range([0, svgParams.width]);
+    .range([0, svgParams.canvas.width]);
 var yScale = d3.scale.linear()
     .domain([scaleParams.minTemp - scaleParams.tempMargin,
              scaleParams.maxTemp + scaleParams.tempMargin])
-    .range([svgParams.height, 0]);
+    .range([svgParams.canvas.height, 0]);
 
-// TODO better named as svgCanvas?
-svgDraw = svgDraw.append('g')
+svgCanvas = svgDraw.append('g')
     .attr('class', 'canvas')
-    .attr('transform', 'translate(' + svgParams.M.LEFT + ', ' + svgParams.M.RIGHT + ')');
+    .attr('transform',
+          'translate(' + svgParams.canvas.margins.left
+          + ', ' + svgParams.canvas.margins.top + ')');
 
 var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
 
 var yAxis = d3.svg.axis().scale(yScale).orient('left');
 
-var svgXAxis = svgDraw.append('g')
+var svgXAxis = svgCanvas.append('g')
     .attr('class', 'axis')
     .call(xAxis)
-    .attr('transform', 'translate(0, ' + svgParams.height+ ')');
-var svgYAxis = svgDraw.append('g').attr('class', 'axis').call(yAxis);
+    .attr('transform', 'translate(0, ' + svgParams.canvas.height+ ')');
+var svgYAxis = svgCanvas.append('g').attr('class', 'axis').call(yAxis);
 
-///////////////// Draw one line first
+///////////////// Draw mult-line graph
 var lineGen = d3.svg.line()
     .x(function(d){ return xScale(d["Year"]) })
     .interpolate('basis');
 
 for (var param of dataParams){
     lineGen.y(function(d){ return yScale(d[param.key])});
-    svgDraw.append('g')
+    svgCanvas.append('g')
         .append('path')
         .attr('d', lineGen(data))
         .attr('stroke', param.color)
         .attr('stroke-width', 2)
         .attr('fill', 'none');
 }
+
+///////////////// Legends and captions
+var svgLegends = svgDraw.append('g')
+    .attr('class', 'legends')
+    .attr('transform',
+          'translate('
+          + (svgParams.canvas.width + svgParams.canvas.margins.left + svgParams.canvas.margins.right
+             + svgParams.legends.margins.left)
+          + ', '
+          + svgParams.legends.margins.top 
+          + ')');
+
+for (var idx = 0; idx < dataParams.length; idx++){
+    var param = dataParams[idx];
+    var svgOneLegend = svgLegends.append('g')
+        .attr('transform', 'translate(0, ' + idx * 30 + ')');
+    svgOneLegend.append('line').attr('x2', 50).attr('stroke-width', '5')
+        .attr('stroke', param.color);
+    // TODO I am doing manual aligning here!! (y = 5 is calculated by trial)
+    svgOneLegend.append('text').attr('x', 55).attr('y', 5)
+        .text(param.name);
+}
+
+// TODO another manual tweaking
+var svgCaption = svgDraw.append('g')
+    .attr('class', 'caption')
+    .attr('transform', 'translate('
+          + ((svgParams.canvas.width + svgParams.canvas.margins.left + svgParams.canvas.margins.right)/2 - 50)
+          + ', '
+          + (svgParams.canvas.height + svgParams.canvas.margins.top + svgParams.canvas.margins.bottom + 20)
+          + ')')
+    .append('text').text('ZonAnnTSS Data');
