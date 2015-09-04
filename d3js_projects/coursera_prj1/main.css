@@ -1,0 +1,15 @@
+.axis path {
+    fill: none;
+    stroke: #777;
+    shape-rendering: crispEdges;
+}
+
+.axis .tick line {
+    stroke: #777;
+    stroke-width: 1px;
+}
+
+.axis text {
+    font-family: Lato;
+    font-size: 13px;
+}

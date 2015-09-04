@@ -41,9 +41,9 @@ else{
 }
 
 // orient bottom is the default
-xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+var xAxis = d3.svg.axis().scale(xScale).orient('bottom');
 // by default, there are ten sects, 10 ticks (11, if the start tick is counted)
-yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(5);
+var yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(5);
 
 var svgXAxis = svgDraw.append('g')
     .attr('class', 'axis')
