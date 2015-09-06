@@ -72,6 +72,8 @@ svgDraw = d3.select('#svg-draw').append('svg')
 //
 // TODO: include Global data for reference?
 
+///// The data name and values are referred from
+// http://www.oracle.com/webfolder/ux/middleware/richclient/index.html?/webfolder/ux/middleware/richclient/guidelines5/inputColor.html
 var dataParams = [
     { name: "S Frigid Zone",
       key: "90S-64S",
@@ -107,19 +109,21 @@ var scaleParams = {
     beginYearMargin: 0,         // keep it zero
     endYearMargin: 5,           // 5 year seems to be good-looking
 };
+
+scaleParams.extentYear = d3.extent(data, function(d){
+    return d["Year"];
+});
+// not relying on the natural order of raw data
+//
+// TODO: if raw data preparation is under our control, we should trust its
+// order or setup the order purposefully even.
+scaleParams.beginYear = scaleParams.extentYear[0];
+scaleParams.endYear = scaleParams.extentYear[1];
+
 for (var row of data){
     scaleParams.minTemp = scaleParams.minTemp || row["24S-24N"];
     scaleParams.maxTemp = scaleParams.maxTemp || row["24S-24N"];
-    scaleParams.beginYear = scaleParams.beginYear || row["Year"];
-    scaleParams.endYear = scaleParams.endYear || row["Year"];
-
-    // not relying on the natural order of raw data
-    //
-    // TODO: if raw data preparation is under our control, we should trust its
-    // order or setup the order purposefully even.
-    scaleParams.beginYear = Math.min(row["Year"], scaleParams.beginYear);
-    scaleParams.endYear = Math.max(row['Year'], scaleParams.endYear);
-
+    
     var tempExtent = d3.extent([
         scaleParams.minTemp, scaleParams.maxTemp,
 
