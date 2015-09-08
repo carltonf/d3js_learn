@@ -1,0 +1,4 @@
+#draw {
+    border: 1px solid blue;
+    width: -moz-min-content;
+}
